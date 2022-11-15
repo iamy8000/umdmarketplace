@@ -209,7 +209,7 @@ function Navigation(props) {
                                     {_.map(MenuItems, (el) => {
                                         const { label = "", value = "", path = "", icon, components } = el
                                         return (
-                                            <>
+                                            <Box key={`menu_${value}`}>
                                                 {components}
                                                 <MenuItem
                                                     onClick={() => {
@@ -220,7 +220,7 @@ function Navigation(props) {
                                                     <ListItemIcon>{icon}</ListItemIcon>
                                                     <ListItemText> {label}</ListItemText>
                                                 </MenuItem>
-                                            </>
+                                            </Box>
                                         )
                                     })}
                                 </Menu>
