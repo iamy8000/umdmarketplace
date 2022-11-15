@@ -8,7 +8,7 @@ function App() {
     return (
         <div>
             <Suspense fallback={<div />}>
-                <BrowserRouter>
+                <BrowserRouter basename="/umdmarketplace">
                     <Navigation />
                 </BrowserRouter>
             </Suspense>
