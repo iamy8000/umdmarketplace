@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/umdmarketplace/static/css/main.073c9b0a.css",
+    "main.js": "/umdmarketplace/static/js/main.9bdd5b06.js",
+    "static/js/787.bb105181.chunk.js": "/umdmarketplace/static/js/787.bb105181.chunk.js",
+    "index.html": "/umdmarketplace/index.html",
+    "main.073c9b0a.css.map": "/umdmarketplace/static/css/main.073c9b0a.css.map",
+    "main.9bdd5b06.js.map": "/umdmarketplace/static/js/main.9bdd5b06.js.map",
+    "787.bb105181.chunk.js.map": "/umdmarketplace/static/js/787.bb105181.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.9bdd5b06.js"
+  ]
+}
