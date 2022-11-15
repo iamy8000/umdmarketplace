@@ -2,7 +2,6 @@
 
 ## Prerequisites
 - [Node and npm](https://nodejs.org/en/download/) are installed. Here are the versions(or above) the application will be using. 
-    1. Install
     ```shell
     $ node --version
     v16.14.0
