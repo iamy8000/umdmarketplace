@@ -11,7 +11,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<ThemeProvider theme={CustomTheme}>
+			<BrowserRouter basename="/umdmarketplace">
 			<App />
+			</BrowserRouter>
 		</ThemeProvider>
 	</React.StrictMode>
 );
