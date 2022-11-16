@@ -5,15 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from "@mui/material/styles";
 import CustomTheme from "theme/customTheme";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<ThemeProvider theme={CustomTheme}>
-			<BrowserRouter basename="/umdmarketplace">
-			<App />
-			</BrowserRouter>
+			<HashRouter>
+				<App />
+			</HashRouter>
 		</ThemeProvider>
 	</React.StrictMode>
 );
