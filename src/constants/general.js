@@ -15,10 +15,6 @@ const Paths = {
 };
 
 const Categories = {
-    // Home: {
-    //     label: "Home",
-    //     path: Paths.Root,
-    // },
     Clothes: {
         label: "Clothes",
         path: Paths.Clothes,
