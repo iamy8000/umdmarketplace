@@ -9,6 +9,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Divider from '@mui/material/Divider';
+// API
+import UserAPI from "services/UserAPI"
 // constant
 const FormColumns = [
     {
@@ -85,6 +87,9 @@ function Register() {
                             fullWidth
                             disableElevation
                             sx={{ borderRadius: "24px" }}
+                            onClick={() => {
+                                const data = UserAPI.Register
+                            }}
                         >
                             Create
                         </Button>
