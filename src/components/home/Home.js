@@ -76,10 +76,13 @@ function Home() {
                                 const { name = "", picture = "", sold_price = "", created_date } = el
                                 return (
                                     <Grid item xs={6} md={4} lg={3} key={`item_${name}_${el}`}>
-                                        <Card elevation={0} sx={{
-                                            boxShadow: "0 4px 20px rgb(34 34 34 / 15%)",
-                                            borderRadius: "8px"
-                                        }}>
+                                        <Card
+                                            elevation={0}
+                                            sx={{
+                                                boxShadow: "0 4px 20px rgb(34 34 34 / 15%)",
+                                                borderRadius: "8px"
+                                            }}
+                                        >
                                             <CardActionArea>
                                                 <CardMedia
                                                     component="img"

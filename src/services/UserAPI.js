@@ -5,21 +5,19 @@ import Axios from "axios";
 // Axios.defaults.withCredentials = true;
 
 const UserAPI = {
-    Register: async () => {
-        try {
-            const data = await Axios.post(
-                `${Config.BASE_URL}/register`,
-                {
-                    email: "test555@email.com",
-                    password: "123456",
-                    phone: "1112223333",
-                    user_name: "testuser555"
-                }
-            );  
-            return data
-        } catch (e) {
-            console.log('Register error: ', e)
-        }
+    Register: async (body = {}) => {
+        const { data } = await Axios.post(
+            `${Config.BASE_URL}/register`,
+            body
+        );
+        return data
+    },
+    Login: async (body = {}) => {
+        const { data } = await Axios.post(
+            `${Config.BASE_URL}/login`,
+            body
+        );
+        return data
     }
 }
 
