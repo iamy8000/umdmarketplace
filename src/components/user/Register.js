@@ -77,12 +77,22 @@ function Register() {
             // Required fields need to be filled
             if (_.isEmpty(values)) {
                 setErrorMsg("Please check if all required fields are filled.")
+                setErrorField(() => {
+                    const result = []
+                    _.map(FieldId, (el) => result.push(el))
+                    return result
+                })
                 return;
             }
 
             _.map(values, (value, key) => {
                 if (_.isEmpty(value)) {
                     setErrorMsg("Please check if all required fields are filled.")
+                    setErrorField(() => {
+                        const result = []
+                        _.map(FieldId, (el) => result.push(el))
+                        return result
+                    })
                     return;
                 }
             })
@@ -106,9 +116,14 @@ function Register() {
 
             const { data: result } = await UserAPI.Register(values)
             // console.log('data:', data)
-        } catch (e) {
-            console.log('handle register error:', e)
-            toast.error('We are not able to create your account now. Please try again later!')
+        } catch (error) {
+            console.log('handle register error:', error)
+            const errormsg = error.response.data.status
+            if (errormsg === 'Email is already exsit') {
+                toast.error('Email is already exsit')
+            } else {
+                toast.error('We are not able to create your account now. Please try again later!')
+            }
         }
     }
 

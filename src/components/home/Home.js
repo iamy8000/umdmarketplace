@@ -19,8 +19,6 @@ import { SellingItems } from "constants/general"
 
 function Home() {
     const theme = useTheme();
-
-    const lgDownBreakpoint = useMediaQuery(theme.breakpoints.down('lg'));
     const mdDownBreakpoint = useMediaQuery(theme.breakpoints.down('md'));
 
     return (

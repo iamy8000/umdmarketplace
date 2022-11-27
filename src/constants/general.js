@@ -5,6 +5,7 @@ const Paths = {
     Register: "/register",
     Seller: "/seller",
     Account: "/account",
+    Auth: "/auth",
     // product
     Clothes: "/clothes",
     Electronics: "/electronics",
@@ -14,26 +15,33 @@ const Paths = {
     FAQ: "/faq"
 };
 
+const CookieId = "user_id"
+
 const Categories = {
     Clothes: {
         label: "Clothes",
         path: Paths.Clothes,
+        id: 1,
     },
     Electronics: {
         label: "Electronics",
         path: Paths.Electronics,
+        id: 2,
     },
     Toys: {
         label: "Toys",
         path: Paths.Toys,
+        id: 3,
     },
     Books: {
         label: "Books",
         path: Paths.Books,
+        id: 4,
     },
     Furnitures: {
         label: "Furnitures",
         path: Paths.Furnitures,
+        id: 5,
     },
 }
 
@@ -103,4 +111,4 @@ const SellingItems = [
     // },
 ]
 
-export { Paths, Categories, SellingItems };
+export { Paths, Categories, SellingItems, CookieId };

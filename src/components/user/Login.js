@@ -2,6 +2,7 @@ import { useState } from "react"
 import _ from "lodash"
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { useCookies } from 'react-cookie';
 // components
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -14,7 +15,7 @@ import Divider from '@mui/material/Divider';
 // API
 import UserAPI from "services/UserAPI"
 /* Constants */
-import { Paths } from "constants/general"
+import { Paths, CookieId } from "constants/general"
 
 const FieldId = {
     Email: "email",
@@ -43,6 +44,7 @@ const Fields = [
 function Login() {
     const navigate = useNavigate()
 
+    const [cookies, setCookie, removeCookie] = useCookies(['name']);
     const [values, setValues] = useState({})
     const [errorMsg, setErrorMsg] = useState("")
     const [errorField, setErrorField] = useState([])
@@ -58,9 +60,14 @@ function Login() {
 
     const handleLogin = async () => {
         try {
-            // Required fields need to be filled
+            // Validate form
             if (_.isEmpty(values)) {
                 setErrorMsg("Please check if all required fields are filled.")
+                setErrorField(() => {
+                    const result = []
+                    _.map(FieldId, (el) => result.push(el))
+                    return result
+                })
                 return;
             }
 
@@ -71,10 +78,24 @@ function Login() {
                 }
             })
 
-            const { data } = await UserAPI.Login(values)
-            // console.log('data:', data)
-        } catch (e) {
-            console.log('handle login error:', e)
+            const { Msg, status, data } = await UserAPI.Login(values)
+            
+            if (status === 0) {
+                if (Msg === 'password is wrong') {
+                    toast.error('Your password was incorrect')
+                } else {
+                    toast.error('User not found.')
+                }
+                return
+            } else {
+                const { user_id } = data
+
+                toast.success('Login successfully.')
+                await setCookie(CookieId, user_id, { path: '/' })
+                navigate(Paths.Root)
+            }
+        } catch (error) {
+            console.log('handle login error:', error)
             toast.error('Please try again later!')
         }
     }

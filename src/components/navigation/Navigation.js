@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import _ from "lodash"
 import { Route, Routes, useNavigate } from "react-router-dom";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from "@mui/material/styles";
+import { useCookies } from 'react-cookie';
 /* Constants */
-import { Paths, Categories } from "constants/general"
+import { Paths, CookieId } from "constants/general"
 /* Components */
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -27,10 +28,13 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import SellIcon from '@mui/icons-material/Sell';
 import HelpIcon from '@mui/icons-material/Help';
 import LoginIcon from '@mui/icons-material/Login';
+import ErrorIcon from '@mui/icons-material/Error';
+import LogoutIcon from '@mui/icons-material/Logout';
 /* Pages */
 import Home from "components/home/Home"
 import Login from "components/user/Login"
 import Register from "components/user/Register";
+import Auth from "components/user/Auth";
 import Seller from "components/seller/Seller";
 import Books from "components/product/Books";
 import Clothes from "components/product/Clothes";
@@ -38,17 +42,16 @@ import Electronics from "components/product/Electronics";
 import FAQ from "components/product/FAQ";
 import Furnitures from "components/product/Furnitures";
 import Toys from "components/product/Toys";
+import Category from "components/product/Category";
+/* APIs */
+import CategoryAPI from "services/CategoryAPI";
+import ProductAPI from "services/ProductAPI";
 
 const MenuId = {
     account: "account",
 }
-const MenuItems = {
-    Login: {
-        label: "Log In/Sign Up",
-        icon: <LoginIcon />,
-        value: "login",
-        path: Paths.Login,
-    },
+
+const UserView = {
     Account: {
         label: "My Profile",
         icon: <AssignmentIndIcon />,
@@ -60,6 +63,36 @@ const MenuItems = {
         icon: <SellIcon />,
         value: "seller",
         path: Paths.Seller
+    },
+    Auth: {
+        label: "Pending Product",
+        icon: <ErrorIcon />,
+        value: "auth",
+        path: Paths.Seller
+    },
+    FAQ: {
+        label: "Help/FAQ",
+        icon: <HelpIcon />,
+        value: "faq",
+        path: Paths.FAQ,
+        components: (
+            <Divider />
+        )
+    },
+    Logout: {
+        label: "Logout",
+        icon: <LogoutIcon />,
+        value: "logout",
+        path: Paths.Root
+    },
+}
+
+const GuestView = {
+    Login: {
+        label: "Log In/Sign Up",
+        icon: <LoginIcon />,
+        value: "login",
+        path: Paths.Login,
     },
     FAQ: {
         label: "Help/FAQ",
@@ -78,8 +111,38 @@ function Navigation(props) {
 
     const lgDownBreakpoint = useMediaQuery(theme.breakpoints.down('lg'));
 
+    const [cookies, setCookie, removeCookie] = useCookies([CookieId]);
     const [menu, setMenu] = useState({})
     const { anchorEl = null, menuId = "" } = menu;
+    const [categories, setCategories] = useState([])
+    const [menuItems, setMenuItems] = useState({})
+
+    useEffect(() => {
+        init()
+    }, [])
+
+    useEffect(() => {
+        if (_.isEmpty(cookies)) {
+            setMenuItems(GuestView)
+        } else {
+            setMenuItems(UserView)
+        }
+    }, [cookies])
+
+    const init = async () => {
+        try {
+            const result = await CategoryAPI.GetCategories()
+            setCategories(result)
+
+            if (_.isEmpty(cookies)) {
+                setMenuItems(GuestView)
+            } else {
+                setMenuItems(UserView)
+            }
+        } catch (e) {
+            console.log('navigation init error: ', e)
+        }
+    }
 
     const handleMenu = (event, menuId) => {
         if (event.currentTarget) {
@@ -123,43 +186,47 @@ function Navigation(props) {
                                     UMD Market Place
                                 </Button>
                             </Grid>
-                            {_.map(Categories, (el) => {
-                                const { label = "", path = "" } = el
+                            {_.map(categories, (el) => {
+                                const { category_name = "" } = el
                                 return (
-                                    <Grid item key={`menu_${label}`}>
+                                    <Grid item key={`menu_${category_name}`}>
                                         <Button
                                             color="inherit"
                                             onClick={() => {
-                                                navigate(path)
+                                                navigate(`/category/${category_name}`)
                                             }}
                                             sx={{
                                                 textTransform: "none",
                                             }}
                                         >
-                                            {label}
+                                            {category_name}
                                         </Button>
                                     </Grid>
                                 )
                             })}
                             <Divider orientation="vertical" variant="middle" flexItem sx={{ background: "white", margin: "8px 8px" }} />
-                            <Grid item>
-                                <Button
-                                    variant="outlined"
-                                    disableElevation
-                                    onClick={() => {
-                                        navigate(Paths.Login)
-                                    }}
-                                    sx={{
-                                        color: 'white',
-                                        borderColor: 'white',
-                                        "&:hover": {
-                                            borderColor: 'lightgray',
-                                        }
-                                    }}
-                                >
-                                    Log In/Sign Up
-                                </Button>
-                            </Grid>
+                            {_.isEmpty(cookies) &&
+                                (
+                                    <Grid item>
+                                        <Button
+                                            variant="outlined"
+                                            disableElevation
+                                            onClick={() => {
+                                                navigate(Paths.Login)
+                                            }}
+                                            sx={{
+                                                color: 'white',
+                                                borderColor: 'white',
+                                                "&:hover": {
+                                                    borderColor: 'lightgray',
+                                                }
+                                            }}
+                                        >
+                                            Log In/Sign Up
+                                        </Button>
+                                    </Grid>
+                                )
+                            }
                             <Grid item>
                                 <IconButton
                                     color="inherit"
@@ -206,13 +273,16 @@ function Navigation(props) {
                                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                                 >
-                                    {_.map(MenuItems, (el) => {
-                                        const { label = "", value = "", path = "", icon, components } = el
+                                    {_.map(menuItems, (el) => {
+                                        const { label = "", value = "", path = "", icon = <></>, components = <></> } = el
                                         return (
                                             <Box key={`menu_${value}`}>
                                                 {components}
                                                 <MenuItem
                                                     onClick={() => {
+                                                        if (value === 'logout') {
+                                                            removeCookie(CookieId)
+                                                        }
                                                         navigate(path)
                                                         setMenu({})
                                                     }}
@@ -239,14 +309,16 @@ function Navigation(props) {
                     <Route path={Paths.Login} element={<Login />} />
                     <Route path={Paths.Register} element={<Register />} />
                     <Route path={Paths.Seller} element={<Seller />} />
+                    <Route path={Paths.Auth} element={<Auth />} />
 
                     {/* product */}
-                    <Route path={Paths.Books} element={<Books />} />
+                    <Route path="/category/:categoryId" element={<Category />} />
+                    {/* <Route path={Paths.Books} element={<Books />} />
                     <Route path={Paths.Clothes} element={<Clothes />} />
-                    <Route path={Paths.Electronics} element={<Electronics />} />
+                    <Route path={Paths.Electronics} element={<Electronics />} /> */}
                     <Route path={Paths.FAQ} element={<FAQ />} />
-                    <Route path={Paths.Furnitures} element={<Furnitures />} />
-                    <Route path={Paths.Toys} element={<Toys />} />
+                    {/* <Route path={Paths.Furnitures} element={<Furnitures />} /> */}
+                    {/* <Route path={Paths.Toys} element={<Toys />} /> */}
 
                     {/* 404 */}
                     <Route
