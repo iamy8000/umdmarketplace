@@ -142,7 +142,7 @@ const theme = createTheme({
             dark: '#AE2E2E',
         },
         background: {
-            default: 'transparent',
+            // default: 'transparent',
         },
         common: {
             black: '#000',

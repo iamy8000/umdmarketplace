@@ -39,6 +39,13 @@ const ProductAPI = {
         );
         return data
     },
+    AuthProduct: async (body = {}) => {
+        const data = await Axios.post(
+            `${Config.BASE_URL}/check`,
+            body
+        );
+        return data
+    },
 }
 
 export default ProductAPI;

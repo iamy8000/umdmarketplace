@@ -11,6 +11,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
 import ProductCard from "components/share/ProductCard";
 // API
 import ProductAPI from "services/ProductAPI";
@@ -42,7 +43,7 @@ function Home() {
     return (
         <Container maxWidth="lg" sx={{ paddingTop: "48px", paddingBottom: "48px" }}>
             <Grid container>
-                <Grid item xs={12} md={9}>
+                <Grid item xs={12} md={10}>
                     <Grid
                         container
                         direction="row"
@@ -67,13 +68,13 @@ function Home() {
                 <Grid
                     item
                     xs={12}
-                    md={3}
+                    md={2}
                 >
                     <Grid
                         container
                         rowSpacing={2}
                         columnSpacing={2}
-                        paddingLeft="8px"
+                        paddingLeft="24px"
                     >
                         <Grid item xs={mdDownBreakpoint ? 12 : "auto"}>
                             <Typography variant="h6">
@@ -86,11 +87,6 @@ function Home() {
                                 product_name = "",
                                 picture = "",
                                 selling_price = "",
-                                category = "",
-                                description = "",
-                                status = 1,
-                                user_id = "",
-                                user_name = "",
                                 views = 0,
                             } = el
                             return (
@@ -105,19 +101,38 @@ function Home() {
                                         <CardActionArea
                                             onClick={() => navigate(`/product/${product_id}`)}
                                         >
+
                                             <CardMedia
                                                 component="img"
-                                                height="40"
+                                                height="90"
                                                 image={picture}
                                                 alt={product_name}
+                                                sx={{
+                                                    objectFit: "contain",
+                                                }}
                                             />
                                             <CardContent sx={{ padding: "4px 8px 8px 8px" }}>
-                                                <Typography variant="body1">
+                                                <Typography
+                                                    variant="body1"
+                                                    sx={{
+                                                        overflow: "hidden",
+                                                        whiteSpace: "nowrap",
+                                                        textOverflow: "ellipsis",
+                                                    }}
+                                                >
                                                     {product_name}
                                                 </Typography>
-                                                <Typography variant="caption">
+                                                <Typography variant="caption" component={'div'}>
                                                     ${selling_price}
                                                 </Typography>
+                                                <Chip
+                                                    color="primary"
+                                                    label={`${views} views`}
+                                                    sx={{
+                                                        marginTop: "8px",
+                                                        width: "100%"
+                                                    }}
+                                                />
                                             </CardContent>
                                         </CardActionArea>
                                     </Card>

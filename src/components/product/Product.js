@@ -54,20 +54,22 @@ function Product() {
 
     return (
         <Container maxWidth="lg" sx={{ paddingTop: "48px", paddingBottom: "48px" }}>
-            <Grid container columnSpacing={2}>
-                <Grid item xs={12} md={7}>
+            <Grid container columnSpacing={3} justifyContent="space-around">
+                <Grid item xs={12} md={6}>
                     <CardMedia
                         component="img"
                         image={picture}
                         sx={{
                             borderRadius: "4px",
-                            // maxHeight: "400px"
+                            // maxHeight: "400px",
+                            objectFit: "contain",
+                            // objectPosition: "center",
                         }}
                     />
                 </Grid>
-                <Grid item xs={12} md={5} container direction="column">
+                <Grid item xs={12} md={4} container direction="column">
                     <Grid item>
-                        <Typography variant="h3">
+                        <Typography variant="h4">
                             {product_name}
                         </Typography>
                     </Grid>
