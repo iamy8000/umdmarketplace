@@ -11,6 +11,12 @@ const CategoryAPI = {
         );
         return data
     },
+    GetCategoryDetail: async (category_id) => {
+        const { data } = await Axios.get(
+            `${Config.BASE_URL}/categorydetail/${category_id}`,
+        );
+        return data
+    }
 }
 
 export default CategoryAPI;

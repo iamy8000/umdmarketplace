@@ -18,6 +18,12 @@ const UserAPI = {
             body
         );
         return data
+    },
+    GetUserInfo: async (user_id) => {
+        const { data } = await Axios.get(
+            `${Config.BASE_URL}/getUserInfo/${user_id}`,
+        )
+        return data
     }
 }
 

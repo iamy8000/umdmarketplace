@@ -91,7 +91,7 @@ function Seller() {
                 const res = {}
                 _.forEach(result, (el) => {
                     const { category_name, category_id } = el
-                    res[category_id] = category_name
+                    res[category_name] = category_id
                 })
                 return res
             })
@@ -121,8 +121,18 @@ function Seller() {
                 }
             })
 
+            console.log({
+                ...values,
+                picture: " ",
+                category_id: categories[category_id],
+                sold_price: parseInt(values.sold_price),
+                user_id: cookies.user_id,
+            })
+
             const result = await ProductAPI.AddProduct({
                 ...values,
+                picture: " ",
+                category_id: categories[category_id],
                 sold_price: parseInt(values.sold_price),
                 user_id: cookies.user_id,
             })
@@ -150,7 +160,7 @@ function Seller() {
 
                     const result = await reader.result
                     handleChange(FieldId.Picture, result)
-                    
+
                     // let binaryString = await readerEvt.target.result
                     // handleChange(FieldId.Picture, btoa(binaryString))
                 } catch (e) {
@@ -264,7 +274,7 @@ function Seller() {
                             variant="outlined"
                             select
                             fullWidth
-                            value={categories[category_id]}
+                            value={category_id}
                             SelectProps={{
                                 SelectDisplayProps: {
                                     style: {
@@ -285,7 +295,7 @@ function Seller() {
                                         key={`category_${value}`}
                                         value={key}
                                     >
-                                        {value}
+                                        {key}
                                     </MenuItem>
                                 )
                             })}

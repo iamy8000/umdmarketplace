@@ -36,16 +36,12 @@ import Login from "components/user/Login"
 import Register from "components/user/Register";
 import Auth from "components/user/Auth";
 import Seller from "components/seller/Seller";
-import Books from "components/product/Books";
-import Clothes from "components/product/Clothes";
-import Electronics from "components/product/Electronics";
 import FAQ from "components/product/FAQ";
-import Furnitures from "components/product/Furnitures";
-import Toys from "components/product/Toys";
 import Category from "components/product/Category";
+import Product from "components/product/Product";
 /* APIs */
 import CategoryAPI from "services/CategoryAPI";
-import ProductAPI from "services/ProductAPI";
+import UserAPI from "services/UserAPI";
 
 const MenuId = {
     account: "account",
@@ -68,7 +64,7 @@ const UserView = {
         label: "Pending Product",
         icon: <ErrorIcon />,
         value: "auth",
-        path: Paths.Seller
+        path: Paths.Auth
     },
     FAQ: {
         label: "Help/FAQ",
@@ -116,6 +112,8 @@ function Navigation(props) {
     const { anchorEl = null, menuId = "" } = menu;
     const [categories, setCategories] = useState([])
     const [menuItems, setMenuItems] = useState({})
+    const [userInfo, setUserInfo] = useState({})
+    const { role: userRole = 0 } = useState
 
     useEffect(() => {
         init()
@@ -138,6 +136,8 @@ function Navigation(props) {
                 setMenuItems(GuestView)
             } else {
                 setMenuItems(UserView)
+                const userResult = await UserAPI.GetUserInfo(cookies[CookieId])
+                setUserInfo(userResult)
             }
         } catch (e) {
             console.log('navigation init error: ', e)
@@ -187,13 +187,13 @@ function Navigation(props) {
                                 </Button>
                             </Grid>
                             {_.map(categories, (el) => {
-                                const { category_name = "" } = el
+                                const { category_name = "", category_id } = el
                                 return (
                                     <Grid item key={`menu_${category_name}`}>
                                         <Button
                                             color="inherit"
                                             onClick={() => {
-                                                navigate(`/category/${category_name}`)
+                                                navigate(`/category/${category_id}`)
                                             }}
                                             sx={{
                                                 textTransform: "none",
@@ -279,6 +279,9 @@ function Navigation(props) {
                                             <Box key={`menu_${value}`}>
                                                 {components}
                                                 <MenuItem
+                                                    sx={{
+                                                        display: (value === 'auth' && userRole !== 0) && 'none'
+                                                    }}
                                                     onClick={() => {
                                                         if (value === 'logout') {
                                                             removeCookie(CookieId)
@@ -313,12 +316,8 @@ function Navigation(props) {
 
                     {/* product */}
                     <Route path="/category/:categoryId" element={<Category />} />
-                    {/* <Route path={Paths.Books} element={<Books />} />
-                    <Route path={Paths.Clothes} element={<Clothes />} />
-                    <Route path={Paths.Electronics} element={<Electronics />} /> */}
+                    <Route path="/product/:productId" element={<Product />} />
                     <Route path={Paths.FAQ} element={<FAQ />} />
-                    {/* <Route path={Paths.Furnitures} element={<Furnitures />} /> */}
-                    {/* <Route path={Paths.Toys} element={<Toys />} /> */}
 
                     {/* 404 */}
                     <Route
