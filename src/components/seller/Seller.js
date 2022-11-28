@@ -154,14 +154,17 @@ function Seller() {
         const getBase64 = (file) => {
             let reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = async (readerEvt) => {
+            reader.onload = (readerEvt) => {
                 try {
                     setLoading(true)
 
-                    const result = await reader.result
-                    handleChange(FieldId.Picture, result)
+                    const result = reader.result
+                    // console.log('result: ', result)
+                    // handleChange(FieldId.Picture, result)
 
-                    // let binaryString = await readerEvt.target.result
+                    let binaryString = readerEvt.target.result
+                    console.log("binaryString: ", binaryString)
+                    reader.readAsBinaryString(file)
                     // handleChange(FieldId.Picture, btoa(binaryString))
                 } catch (e) {
                     console.log('upload picture error: ', e)
