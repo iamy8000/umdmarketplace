@@ -121,17 +121,15 @@ function Seller() {
                 }
             })
 
-            console.log({
-                ...values,
-                picture: " ",
-                category_id: categories[category_id],
-                sold_price: parseInt(values.sold_price),
-                user_id: cookies.user_id,
-            })
+            // console.log({
+            //     ...values,
+            //     category_id: categories[category_id],
+            //     sold_price: parseInt(values.sold_price),
+            //     user_id: cookies.user_id,
+            // })
 
             const result = await ProductAPI.AddProduct({
                 ...values,
-                picture: " ",
                 category_id: categories[category_id],
                 sold_price: parseInt(values.sold_price),
                 user_id: cookies.user_id,
@@ -158,14 +156,14 @@ function Seller() {
                 try {
                     setLoading(true)
 
-                    const result = reader.result
-                    // console.log('result: ', result)
+                    // const result = reader.result
+                    // console.log('base64 result: ', result)
                     // handleChange(FieldId.Picture, result)
 
-                    let binaryString = readerEvt.target.result
-                    console.log("binaryString: ", binaryString)
-                    reader.readAsBinaryString(file)
-                    // handleChange(FieldId.Picture, btoa(binaryString))
+                    const binaryString = readerEvt.target.result
+                    // console.log("binaryString: ", binaryString)
+                    // reader.readAsBinaryString(file)
+                    handleChange(FieldId.Picture, binaryString)
                 } catch (e) {
                     console.log('upload picture error: ', e)
                 } finally {

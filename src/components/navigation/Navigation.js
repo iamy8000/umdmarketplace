@@ -39,6 +39,8 @@ import Seller from "components/seller/Seller";
 import FAQ from "components/product/FAQ";
 import Category from "components/product/Category";
 import Product from "components/product/Product";
+import Success from "components/seller/Success";
+import Profile from "components/user/Profile";
 /* APIs */
 import CategoryAPI from "services/CategoryAPI";
 import UserAPI from "services/UserAPI";
@@ -113,7 +115,7 @@ function Navigation(props) {
     const [categories, setCategories] = useState([])
     const [menuItems, setMenuItems] = useState({})
     const [userInfo, setUserInfo] = useState({})
-    const { role: userRole = 0 } = useState
+    const { role: userRole = 0 } = userInfo
 
     useEffect(() => {
         init()
@@ -157,8 +159,8 @@ function Navigation(props) {
         setMenu({})
     }
 
-    return (
-        <div>
+    const MenuBar = () => {
+        return (
             <AppBar elevation={0}>
                 <Container maxWidth="lg">
                     <Toolbar>
@@ -280,7 +282,7 @@ function Navigation(props) {
                                                 {components}
                                                 <MenuItem
                                                     sx={{
-                                                        display: (value === 'auth' && userRole !== 0) && 'none'
+                                                        display: (value === 'auth' && userRole === 0) && 'none'
                                                     }}
                                                     onClick={() => {
                                                         if (value === 'logout') {
@@ -302,6 +304,12 @@ function Navigation(props) {
                     </Toolbar>
                 </Container>
             </AppBar>
+        )
+    }
+
+    return (
+        <div>
+            {MenuBar()}
 
             {/* Body */}
             <Container maxWidth="lg" sx={{ paddingTop: "64px" }}>
@@ -312,7 +320,9 @@ function Navigation(props) {
                     <Route path={Paths.Login} element={<Login />} />
                     <Route path={Paths.Register} element={<Register />} />
                     <Route path={Paths.Seller} element={<Seller />} />
+                    <Route path={Paths.Success} element={<Success />} />
                     <Route path={Paths.Auth} element={<Auth />} />
+                    <Route path={Paths.Profile} element={<Profile />} />
 
                     {/* product */}
                     <Route path="/category/:categoryId" element={<Category />} />

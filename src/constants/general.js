@@ -4,8 +4,10 @@ const Paths = {
     Login: "/login",
     Register: "/register",
     Seller: "/seller",
+    Success: "/success",
     Account: "/account",
     Auth: "/auth",
+    Profile: "profile",
     // product
     FAQ: "/faq"
 };

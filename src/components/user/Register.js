@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import _ from "lodash"
 import { toast } from 'react-toastify';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from "react-router-dom";
 // components
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -12,6 +14,8 @@ import Card from '@mui/material/Card';
 // API
 import UserAPI from "services/UserAPI"
 // constant
+import { Paths, CookieId } from "constants/general"
+
 const FieldId = {
     Username: "user_name",
     Email: "email",
@@ -54,6 +58,9 @@ const Fields = [
 ]
 
 function Register() {
+    const navigate = useNavigate()
+
+    const [cookies, setCookie, removeCookie] = useCookies(['name']);
     const [values, setValues] = useState({})
     const [errorMsg, setErrorMsg] = useState("")
     const [errorField, setErrorField] = useState([])
@@ -98,9 +105,9 @@ function Register() {
             })
 
             // validate email format
-            const emailReq =
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (!emailReq.test(String(values[FieldId.Email]).toLowerCase()) || !values[FieldId.Email]?.indexOf('@umd.edu')) {
+            const emailReq = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            if (!emailReq.test(String(values[FieldId.Email]).toLowerCase()) || values[FieldId.Email]?.indexOf('@umd.edu') === -1) {
                 setErrorMsg("Please use UMD email address.")
                 setErrorField([FieldId.Email])
                 return;
@@ -115,7 +122,14 @@ function Register() {
             }
 
             const { data: result } = await UserAPI.Register(values)
-            // console.log('data:', data)
+            const { user_id = "" } = result
+            console.log('registration result:', result)
+            toast.success("Successfully registered!")
+
+            // log in & redirect to homepage
+            await setCookie(CookieId, user_id, { path: '/' })
+            navigate(Paths.Root)
+
         } catch (error) {
             console.log('handle register error:', error)
             const errormsg = error.response.data.status

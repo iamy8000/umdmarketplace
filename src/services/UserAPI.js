@@ -24,6 +24,13 @@ const UserAPI = {
             `${Config.BASE_URL}/getUserInfo/${user_id}`,
         )
         return data
+    },
+    updateProfile: async (body = {}) => {
+        const { data } = await Axios.post(
+            `${Config.BASE_URL}/updateProfile`,
+            body
+        )
+        return data
     }
 }
 
