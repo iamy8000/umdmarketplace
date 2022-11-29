@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import _ from "lodash"
 import { useCookies } from 'react-cookie';
 import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom";
 /* Components */
 import Container from "@mui/material/Container"
 import Grid from "@mui/material/Grid"
@@ -23,7 +24,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import ProductAPI from "services/ProductAPI"
 import CategoryAPI from "services/CategoryAPI"
 /* Constants */
-import { CookieId } from "constants/general";
+import { Paths, CookieId } from "constants/general";
 
 const FieldId = {
     Name: "name",
@@ -73,6 +74,7 @@ const SellerInfoColumns = [
 ]
 
 function Seller() {
+    const navigate = useNavigate()
     const [cookies] = useCookies([CookieId]);
     const [loading, setLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState("")
@@ -130,11 +132,14 @@ function Seller() {
 
             const result = await ProductAPI.AddProduct({
                 ...values,
+                // picture: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
                 category_id: categories[category_id],
                 sold_price: parseInt(values.sold_price),
                 user_id: cookies.user_id,
             })
             console.log('result: ', result)
+            navigate(Paths.Success)
+
         } catch (e) {
             toast.error('Please try again later!')
         } finally {

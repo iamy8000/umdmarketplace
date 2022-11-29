@@ -122,6 +122,7 @@ function Navigation(props) {
     }, [])
 
     useEffect(() => {
+        init()
         if (_.isEmpty(cookies)) {
             setMenuItems(GuestView)
         } else {
