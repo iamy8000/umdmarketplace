@@ -323,7 +323,7 @@ function Navigation(props) {
                     <Route path={Paths.Seller} element={<Seller />} />
                     <Route path={Paths.Success} element={<Success />} />
                     <Route path={Paths.Auth} element={<Auth />} />
-                    <Route path={Paths.Profile} element={<Profile />} />
+                    <Route path={Paths.Account} element={<Profile />} />
 
                     {/* product */}
                     <Route path="/category/:categoryId" element={<Category />} />
